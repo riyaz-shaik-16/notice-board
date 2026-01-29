@@ -7,9 +7,9 @@ export default function OfficialLayout() {
   const { user, logout } = useAuth();
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex h-screen overflow-hidden">
       {/* Sidebar */}
-      <aside className="w-64 border-r p-4 flex flex-col justify-between">
+      <aside className="w-64 border-r p-4 flex flex-col justify-between sticky top-0 h-screen bg-background">
         <div>
           <h2 className="text-xl font-bold mb-1">Official</h2>
           <p className="text-sm text-muted-foreground mb-4">
@@ -20,7 +20,7 @@ export default function OfficialLayout() {
             <NavLink
               to="/official/create-notice"
               className={({ isActive }) =>
-                `flex items-center px-4 py-2 rounded-md w-full justify-start ${
+                `flex items-center px-4 py-2 rounded-md ${
                   isActive
                     ? "bg-accent text-accent-foreground"
                     : "hover:bg-accent/50"
@@ -33,7 +33,7 @@ export default function OfficialLayout() {
             <NavLink
               to="/official/notices"
               className={({ isActive }) =>
-                `flex items-center px-4 py-2 rounded-md w-full justify-start ${
+                `flex items-center px-4 py-2 rounded-md ${
                   isActive
                     ? "bg-accent text-accent-foreground"
                     : "hover:bg-accent/50"
@@ -51,7 +51,7 @@ export default function OfficialLayout() {
       </aside>
 
       {/* Content */}
-      <main className="flex-1 p-6">
+      <main className="flex-1 overflow-y-auto p-6">
         <Separator className="mb-4" />
         <Outlet />
       </main>

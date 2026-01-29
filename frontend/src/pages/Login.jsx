@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Landmark } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 export default function Login() {
@@ -32,7 +33,6 @@ export default function Login() {
     try {
       await login(phone, password);
 
-      // role comes from backend (stored in AuthContext)
       const storedUser = JSON.parse(localStorage.getItem("user"));
 
       if (storedUser.role === "admin") {
@@ -40,8 +40,8 @@ export default function Login() {
       } else {
         navigate("/official");
       }
-    } catch (err) {
-      setError("Invalid phone or password");
+    } catch {
+      setError("Invalid phone number or password");
     } finally {
       setLoading(false);
     }
@@ -49,45 +49,70 @@ export default function Login() {
 
   const title =
     roleHint === "admin"
-      ? "Admin Login"
+      ? "Administrator Login"
       : roleHint === "official"
       ? "Official Login"
       : "Login";
 
+  const subtitle =
+    roleHint === "admin"
+      ? "Authorized access only"
+      : "For government officials";
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-muted/40">
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <CardTitle className="text-center text-xl">
+    <div className="min-h-screen flex items-center justify-center bg-muted/40 px-4">
+      <Card className="w-full max-w-md shadow-lg">
+        <CardHeader className="text-center space-y-3">
+          <div className="flex justify-center">
+            <Landmark className="h-9 w-9 text-primary" />
+          </div>
+
+          <CardTitle className="text-2xl font-bold">
             {title}
           </CardTitle>
+
+          <p className="text-sm text-muted-foreground">
+            {subtitle}
+          </p>
         </CardHeader>
 
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <Label>Phone Number</Label>
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="space-y-1">
+              <Label className="text-base">
+                Phone Number
+              </Label>
               <Input
-                placeholder="9876543210"
+                className="h-12 text-base"
+                placeholder="Enter mobile number"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
               />
             </div>
 
-            <div>
-              <Label>Password</Label>
+            <div className="space-y-1">
+              <Label className="text-base">
+                Password
+              </Label>
               <Input
+                className="h-12 text-base"
                 type="password"
+                placeholder="Enter password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
 
             {error && (
-              <p className="text-sm text-red-500">{error}</p>
+              <div className="rounded-md bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-600">
+                {error}
+              </div>
             )}
 
-            <Button className="w-full" disabled={loading}>
+            <Button
+              className="w-full h-12 text-lg"
+              disabled={loading}
+            >
               {loading ? "Logging in..." : "Login"}
             </Button>
           </form>

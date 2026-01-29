@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { CalendarDays, Languages } from "lucide-react";
 import { translateToTelugu } from "@/utils/translate";
 
 export default function NoticeCard({ notice }) {
@@ -11,13 +13,11 @@ export default function NoticeCard({ notice }) {
   const [loading, setLoading] = useState(false);
 
   const handleToggleLanguage = async () => {
-    // Switch back to English
     if (lang === "te") {
       setLang("en");
       return;
     }
 
-    // Already translated → reuse
     if (translated.title && translated.description) {
       setLang("te");
       return;
@@ -37,7 +37,7 @@ export default function NoticeCard({ notice }) {
       });
 
       setLang("te");
-    } catch (err) {
+    } catch {
       alert("Translation failed. Please try again.");
     } finally {
       setLoading(false);
@@ -45,36 +45,45 @@ export default function NoticeCard({ notice }) {
   };
 
   return (
-    <div className="border rounded-lg p-4 space-y-2">
-      <div className="flex justify-between items-start">
-        <h2 className="font-bold text-lg">
-          {lang === "en" ? notice.title : translated.title}
-        </h2>
+    <Card className="shadow-md border">
+      <CardHeader className="pb-3">
+        <div className="flex items-start justify-between gap-4">
+          <h2 className="text-xl font-semibold leading-snug">
+            {lang === "en" ? notice.title : translated.title}
+          </h2>
 
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={handleToggleLanguage}
-          disabled={loading}
-        >
-          {loading
-            ? "Translating..."
-            : lang === "en"
-            ? "తెలుగు"
-            : "English"}
-        </Button>
-      </div>
+          <Button
+            size="sm"
+            variant="secondary"
+            className="flex gap-1 shrink-0"
+            onClick={handleToggleLanguage}
+            disabled={loading}
+          >
+            <Languages className="h-4 w-4" />
+            {loading
+              ? "Translating..."
+              : lang === "en"
+              ? "తెలుగు"
+              : "English"}
+          </Button>
+        </div>
+      </CardHeader>
 
-      <p>
-        {lang === "en"
-          ? notice.description
-          : translated.description}
-      </p>
+      <CardContent className="space-y-4">
+        <p className="text-base leading-relaxed">
+          {lang === "en"
+            ? notice.description
+            : translated.description}
+        </p>
 
-      <p className="text-sm text-muted-foreground">
-        Event Date:{" "}
-        {new Date(notice.eventDate).toLocaleDateString()}
-      </p>
-    </div>
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <CalendarDays className="h-4 w-4" />
+          <span>
+            Event Date:{" "}
+            {new Date(notice.eventDate).toLocaleDateString()}
+          </span>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
