@@ -52,7 +52,7 @@ export default function NoticeCard({ notice }) {
             {lang === "en" ? notice.title : translated.title}
           </h2>
 
-          <Button
+          {/* <Button
             size="sm"
             variant="secondary"
             className="flex gap-1 shrink-0"
@@ -65,7 +65,7 @@ export default function NoticeCard({ notice }) {
               : lang === "en"
               ? "తెలుగు"
               : "English"}
-          </Button>
+          </Button> */}
         </div>
       </CardHeader>
 
